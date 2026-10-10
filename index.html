@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Озеро Зайсан: Жемчужина Восточного Казахстана</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zaysan: {
+                            deep: '#0B2545',
+                            navy: '#134074',
+                            teal: '#8DA9C4',
+                            sand: '#EE6C4D',
+                            light: '#EEF4F8',
+                            emerald: '#2A9D8F',
+                            gold: '#E9C46A'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #06111e;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .font-title {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(19, 64, 116, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 1rem;
+        }
+
+        .glass-nav {
+            background: rgba(11, 37, 69, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #06111e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #134074;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2A9D8F;
+        }
+
+        /* Glow effects */
+        .glow-text {
+            text-shadow: 0 0 15px rgba(141, 169, 196, 0.6);
+        }
+        .glow-box {
+            box-shadow: 0 0 25px rgba(42, 157, 143, 0.3);
+        }
+
+        /* Tab Transition */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Pulse animation for map nodes */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .animate-pulse-fast {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-zaysan-emerald selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('hero')">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-zaysan-emerald to-zaysan-teal flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                    З
+                </div>
+                <div>
+                    <h1 class="font-title font-bold text-lg md:text-xl tracking-wider text-white">ЗАЙСАН</h1>
+                    <p class="text-xs text-zaysan-teal tracking-widest uppercase">Краеведческий Эко-Гид</p>
+                </div>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center space-x-1">
+                <button onclick="switchTab('hero')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-zaysan-teal hover:text-white active-nav" data-tab="hero">Главная</button>
+                <button onclick="switchTab('geo')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-gray-300 hover:text-white" data-tab="geo">Карта & География</button>
+                <button onclick="switchTab('history')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-gray-300 hover:text-white" data-tab="history">История & Легенды</button>
+                <button onclick="switchTab('nature')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-gray-300 hover:text-white" data-tab="nature">Флора & Фауна</button>
+                <button onclick="switchTab('ecology')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-gray-300 hover:text-white" data-tab="ecology">Экология</button>
+                <button onclick="switchTab('games')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-gray-300 hover:text-white" data-tab="games">Игры-Симуляторы</button>
+                <button onclick="switchTab('quiz')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition text-gray-300 hover:text-white" data-tab="quiz">Викторина</button>
+            </nav>
+
+            <!-- Audio Control & Mobile Menu Toggle -->
+            <div class="flex items-center gap-3">
+                <button id="audio-toggle" onclick="toggleAmbience()" class="p-2.5 rounded-full glass-card hover:bg-zaysan-emerald/40 transition text-zaysan-teal hover:text-white" title="Включить звук природы">
+                    <i class="fas fa-volume-mute text-lg" id="audio-icon"></i>
+                </button>
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg glass-card text-gray-300 hover:text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-6 space-y-2 glass-nav border-t border-white/10">
+            <button onclick="switchTab('hero'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-white hover:bg-white/10">Главная</button>
+            <button onclick="switchTab('geo'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Карта & География</button>
+            <button onclick="switchTab('history'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">История & Легенды</button>
+            <button onclick="switchTab('nature'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Флора & Фауна</button>
+            <button onclick="switchTab('ecology'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Экология</button>
+            <button onclick="switchTab('games'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Игры-Симуляторы</button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Викторина</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow pt-20">
+
+        <!-- TAB 1: HERO SECTION -->
+        <section id="hero" class="tab-content active relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+            <!-- Animated Canvas Background -->
+            <canvas id="hero-canvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></canvas>
+
+            <div class="relative z-10 max-w-5xl mx-auto px-4 text-center py-12">
+                <div class="inline-block px-4 py-1.5 rounded-full glass-card text-zaysan-gold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 border border-zaysan-gold/30">
+                    <i class="fas fa-award mr-2"></i>Исследовательский проект • 9 «Г» класс
+                </div>
+                <h1 class="font-title text-4xl sm:text-6xl md:text-7xl font-extrabold text-white mb-6 leading-tight tracking-wide glow-text">
+                    ТАЙНЫ ОЗЕРА <span class="text-transparent bg-clip-text bg-gradient-to-r from-zaysan-teal via-zaysan-emerald to-zaysan-gold">ЗАЙСАН</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed mb-8">
+                    Интерактивное виртуальное путешествие по древнейшему водоёму Азии. История, реликтовая экосистема, легенды «звонких вод» и современные экологические задачи.
+                </p>
+
+                <!-- Author Badge -->
+                <div class="glass-card inline-flex items-center gap-4 px-6 py-3 mb-10 text-left border-zaysan-emerald/40">
+                    <div class="w-12 h-12 rounded-full bg-zaysan-emerald/20 flex items-center justify-center border border-zaysan-emerald">
+                        <i class="fas fa-user-graduate text-zaysan-gold text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest">Автор проекта</div>
+                        <div class="text-white font-semibold text-base">Дулатулы Ильяс</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="switchTab('geo')" class="px-8 py-4 rounded-xl bg-gradient-to-r from-zaysan-emerald to-zaysan-navy text-white font-bold shadow-lg hover:shadow-zaysan-emerald/50 hover:scale-105 transition transform flex items-center gap-3">
+                        <i class="fas fa-compass"></i> Начать исследование
+                    </button>
+                    <button onclick="switchTab('games')" class="px-8 py-4 rounded-xl glass-card text-white font-bold hover:bg-white/10 transition hover:scale-105 transform flex items-center gap-3 border border-white/20">
+                        <i class="fas fa-gamepad text-zaysan-gold"></i> Интерактивные Игры
+                    </button>
+                </div>
+            </div>
+
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce text-zaysan-teal/60 text-2xl">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </section>
+
+        <!-- TAB 2: GEOGRAPHY & INTERACTIVE MAP -->
+        <section id="geo" class="tab-content max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-bold text-white mb-3">Географический Обзор и Карта</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-zaysan-emerald to-zaysan-gold mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Исследуйте ключевые географические точки и физические характеристики пресноводного гиганта Восточного Казахстана.</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
+                <div class="glass-card p-6 text-center hover:border-zaysan-emerald transition">
+                    <i class="fas fa-ruler-combined text-3xl text-zaysan-emerald mb-3"></i>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">1 810 км²</div>
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Площадь зеркала</div>
+                </div>
+                <div class="glass-card p-6 text-center hover:border-zaysan-emerald transition">
+                    <i class="fas fa-arrows-alt-v text-3xl text-zaysan-gold mb-3"></i>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">4 - 15 м</div>
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Глубина (Ср / Макс)</div>
+                </div>
+                <div class="glass-card p-6 text-center hover:border-zaysan-emerald transition">
+                    <i class="fas fa-water text-3xl text-zaysan-teal mb-3"></i>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">Чёрный Иртыш</div>
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Главный приток</div>
+                </div>
+                <div class="glass-card p-6 text-center hover:border-zaysan-emerald transition">
+                    <i class="fas fa-mountain text-3xl text-zaysan-sand mb-3"></i>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">420 м</div>
+                    <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Высота над уровнем моря</div>
+                </div>
+            </div>
+
+            <!-- Interactive Canvas Map & Detail Card -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <div class="lg:col-span-2 glass-card p-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-4 px-2">
+                        <span class="text-sm font-semibold text-zaysan-teal uppercase tracking-wider"><i class="fas fa-map-marked-alt mr-2"></i>Интерактивная карта Зайсана</span>
+                        <span class="text-xs text-gray-400">Кликните по токенам локаций</span>
+                    </div>
+                    <div class="relative w-full aspect-[16/9] bg-zaysan-deep/80 rounded-lg overflow-hidden border border-white/10">
+                        <canvas id="map-canvas" class="w-full h-full cursor-pointer"></canvas>
+                    </div>
+                </div>
+
+                <!-- Info Box for Map Selection -->
+                <div class="glass-card p-6 border-zaysan-emerald/30 min-h-[400px] flex flex-col justify-between" id="map-info-box">
+                    <div>
+                        <div class="inline-block px-3 py-1 rounded bg-zaysan-emerald/20 text-zaysan-emerald text-xs font-bold uppercase mb-3" id="map-info-tag">
+                            Выберите точку
+                        </div>
+                        <h3 class="font-title text-2xl font-bold text-white mb-4" id="map-info-title">Исследование Карты</h3>
+                        <p class="text-gray-300 leading-relaxed text-sm mb-6" id="map-info-desc">
+                            Нажмите на любую из мерцающих интерактивных меток на карте озера, чтобы узнать подробную информацию об устьях рек, плотине, береговых рельефах и уникальных экозонах.
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-black/30 border border-white/5" id="map-info-fact">
+                        <i class="fas fa-lightbulb text-zaysan-gold mr-2"></i>
+                        <span class="text-xs text-gray-300">Озеро Зайсан является проточным водоёмом: в него впадает Чёрный Иртыш, а вытекает река Иртыш.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: HISTORY & LEGENDS -->
+        <section id="history" class="tab-content max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-bold text-white mb-3">История и Легенды Древнего Водоема</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-zaysan-emerald to-zaysan-gold mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">От древнего монгольского/джунгарского названия «Жесон-Нор» до исследований Пржевальского и судоходства XX века.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Legend 1 -->
+                <div class="glass-card p-8 border-l-4 border-zaysan-gold hover:translate-y-[-4px] transition duration-300">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-zaysan-gold/20 flex items-center justify-center text-zaysan-gold">
+                            <i class="fas fa-bell text-lg"></i>
+                        </div>
+                        <h3 class="font-title text-xl font-bold text-white">Легенда о «Колокольном гуле» (Жесон-Нор)</h3>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                        В древние времена монголы и джунгары называли озеро <strong>«Жесон-Нор»</strong> (Озеро колокольчиков / Благородное озеро). По вечерним сумеркам с волн доносился таинственный гул, напоминающий перезвон вечерних колоколов.
+                    </p>
+                    <p class="text-gray-400 text-xs italic">
+                        Научное объяснение: Ветер, проходящий сквозь густые прибрежные камыши и выветренные песчаные каньоны (Шекельмес), создавал акустический резонанс, похожий на звон.
+                    </p>
+                </div>
+
+                <!-- Legend 2 -->
+                <div class="glass-card p-8 border-l-4 border-zaysan-emerald hover:translate-y-[-4px] transition duration-300">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-zaysan-emerald/20 flex items-center justify-center text-zaysan-emerald">
+                            <i class="fas fa-fish text-lg"></i>
+                        </div>
+                        <h3 class="font-title text-xl font-bold text-white">«Спасшее от голода» (Зайсан)</h3>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                        По легенде, во время калмыцкого или джунгарского джута (голода) истощенные люди пришли к берегам озера. Воды были настолько богаты рыбой, что людей удалось спасти от гибели. В знак благодарности озеро назвали <strong>«Зайсан»</strong> (что означает «Князь», «Cпаситель» или «Благодетель»).
+                    </p>
+                    <p class="text-gray-400 text-xs italic">
+                        Известно, что в XIX веке за сезон из озера вылавливали сотни тонн сазана и тайменя.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Historical Timeline -->
+            <div class="glass-card p-8">
+                <h3 class="font-title text-2xl font-bold text-white mb-8 text-center">Хронология исследований и освоения</h3>
+
+                <div class="relative border-l-2 border-zaysan-emerald/40 ml-4 md:ml-32 space-y-8">
+                    <!-- Event 1 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-zaysan-emerald border-4 border-zaysan-deep"></div>
+                        <div class="md:absolute md:-left-32 md:top-1 text-sm font-bold text-zaysan-teal">XVII–XVIII вв.</div>
+                        <h4 class="text-lg font-bold text-white">Джунгарский период</h4>
+                        <p class="text-gray-300 text-sm mt-1">Первые картографические упоминания озера китайскими и российскими академическими экспедициями.</p>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-zaysan-gold border-4 border-zaysan-deep"></div>
+                        <div class="md:absolute md:-left-32 md:top-1 text-sm font-bold text-zaysan-gold">1870-е гг.</div>
+                        <h4 class="text-lg font-bold text-white">Экспедиции Н. М. Пржевальского</h4>
+                        <p class="text-gray-300 text-sm mt-1">Великий исследователь описал богатейшую фауну Зайсана, гнездования тысяч пеликанов и диких лошадей Пржевальского в округе.</p>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-zaysan-sand border-4 border-zaysan-deep"></div>
+                        <div class="md:absolute md:-left-32 md:top-1 text-sm font-bold text-zaysan-sand">1960 год</div>
+                        <h4 class="text-lg font-bold text-white">Строительство Бухтарминской ГЭС</h4>
+                        <p class="text-gray-300 text-sm mt-1">Озеро Зайсан стало частью Бухтарминского водохранилища. Уровень воды поднялся на 6 метров, а площадь озера увеличилась почти в 3 раза!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: FLORA & FAUNA -->
+        <section id="nature" class="tab-content max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-bold text-white mb-3">Биоразнообразие: Флора и Фауна</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-zaysan-emerald to-zaysan-gold mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Уникальные обитатели Зайсанской котловины — от краснокнижных птиц до реликтов.</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 mb-10">
+                <button onclick="filterBio('all')" class="bio-filter-btn active px-5 py-2 rounded-full glass-card text-sm font-medium hover:bg-zaysan-emerald transition text-white border-zaysan-emerald" data-cat="all">Все обитатели</button>
+                <button onclick="filterBio('fish')" class="bio-filter-btn px-5 py-2 rounded-full glass-card text-sm font-medium hover:bg-zaysan-emerald transition text-gray-300" data-cat="fish"><i class="fas fa-fish mr-2"></i>Рыбы</button>
+                <button onclick="filterBio('bird')" class="bio-filter-btn px-5 py-2 rounded-full glass-card text-sm font-medium hover:bg-zaysan-emerald transition text-gray-300" data-cat="bird"><i class="fas fa-crow mr-2"></i>Птицы</button>
+                <button onclick="filterBio('mammal')" class="bio-filter-btn px-5 py-2 rounded-full glass-card text-sm font-medium hover:bg-zaysan-emerald transition text-gray-300" data-cat="mammal"><i class="fas fa-paw mr-2"></i>Млекопитающие & Рептилии</button>
+                <button onclick="filterBio('flora')" class="bio-filter-btn px-5 py-2 rounded-full glass-card text-sm font-medium hover:bg-zaysan-emerald transition text-gray-300" data-cat="flora"><i class="fas fa-leaf mr-2"></i>Растения</button>
+            </div>
+
+            <!-- Species Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="bio-grid">
+                <!-- Cards injected dynamically via JavaScript -->
+            </div>
+        </section>
+
+        <!-- TAB 5: ECOLOGY & THREATS -->
+        <section id="ecology" class="tab-content max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-bold text-white mb-3">Экология и Сохранение</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-zaysan-emerald to-zaysan-gold mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Современные экологические вызовы озера Зайсан: регулирование стока, браконьерство и заиление.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Chart Container 1 -->
+                <div class="glass-card p-6">
+                    <h3 class="font-title text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-zaysan-teal"></i> Динамика уровня воды (1950 - 2025)
+                    </h3>
+                    <div class="relative aspect-[16/9] w-full">
+                        <canvas id="chart-water-level"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-4">
+                        Примечание: Резкий подъем воды в 1960-х обусловлен заполнением Бухтарминского водохранилища. В последние годы наблюдаются колебания из-за изменения климата.
+                    </p>
+                </div>
+
+                <!-- Chart Container 2 -->
+                <div class="glass-card p-6">
+                    <h3 class="font-title text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-pie text-zaysan-gold"></i> Структура факторов риска экосистемы
+                    </h3>
+                    <div class="relative aspect-[16/9] w-full">
+                        <canvas id="chart-threats"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-4">
+                        Главная опасность — незаконный лов рыбы мелкоячеистыми синтетическими сетями и снижение стока трансграничного Чёрного Иртыша.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Eco Action Box -->
+            <div class="glass-card p-8 border-zaysan-emerald/50 bg-gradient-to-r from-zaysan-deep to-zaysan-navy">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 class="font-title text-2xl font-bold text-white mb-2">Пути решения и охрана природа</h3>
+                        <ul class="text-gray-300 text-sm space-y-2 list-disc list-inside">
+                            <li>Установление жестких сезонных запретов на промышленный вылов рыбы.</li>
+                            <li>Создание дополнительных охранных микро-заказников в дельте Чёрного Иртыша.</li>
+                            <li>Международный контроль и мониторинг трансграничного водного баланса.</li>
+                            <li>Очистка береговых зон от брошенных пластиковых сетей и мусора.</li>
+                        </ul>
+                    </div>
+                    <button onclick="switchTab('games')" class="px-6 py-3 rounded-xl bg-zaysan-emerald text-white font-bold hover:bg-opacity-80 transition whitespace-nowrap shadow-lg">
+                        <i class="fas fa-hands-helping mr-2"></i>Помочь Зайсану в игре
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: INTERACTIVE GAMES & SIMULATOR -->
+        <section id="games" class="tab-content max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-bold text-white mb-3">Интерактивные Эко-Игры</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-zaysan-emerald to-zaysan-gold mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Попробуйте себя в роли эко-волонтёра или управляющего гидро-балансом озера!</p>
+            </div>
+
+            <!-- Game Sub-Tabs -->
+            <div class="flex justify-center gap-4 mb-8">
+                <button onclick="switchGame('cleaner')" id="btn-game-cleaner" class="px-6 py-2.5 rounded-xl font-bold glass-card text-zaysan-emerald border-zaysan-emerald">
+                    <i class="fas fa-ship mr-2"></i>Игра 1: Эко-Очистка Озера
+                </button>
+                <button onclick="switchGame('sim')" id="btn-game-sim" class="px-6 py-2.5 rounded-xl font-bold glass-card text-gray-400 hover:text-white">
+                    <i class="fas fa-sliders-h mr-2"></i>Симулятор: Баланс Экосистемы
+                </button>
+            </div>
+
+            <!-- GAME 1: LAKE CLEANER (CANVAS ACTION GAME) -->
+            <div id="game-cleaner-container" class="glass-card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <div>
+                        <h3 class="font-title text-xl font-bold text-white">Эко-Катер: Очистка Вод Зайсана</h3>
+                        <p class="text-xs text-gray-400">Управляйте лодкой (стрелки ◄ ► или мышь/касание). Собирайте мусор и браконьерские сети. Не задевайте редких рыб и пеликанов!</p>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="text-center"><span class="text-xs text-gray-400 block">Очки</span><span id="game-score" class="text-2xl font-bold text-zaysan-gold">0</span></div>
+                        <div class="text-center"><span class="text-xs text-gray-400 block">Время</span><span id="game-timer" class="text-2xl font-bold text-zaysan-teal">30s</span></div>
+                        <button id="start-game-btn" onclick="startCleanerGame()" class="px-5 py-2.5 rounded-lg bg-zaysan-emerald hover:bg-opacity-80 font-bold text-white transition">
+                            <i class="fas fa-play mr-1"></i> Старт
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative aspect-[16/9] w-full max-h-[500px] bg-slate-900 rounded-lg overflow-hidden border border-white/10">
+                    <canvas id="game-canvas" class="w-full h-full"></canvas>
+                    <div id="game-overlay" class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-center p-6">
+                        <i class="fas fa-water-lower text-5xl text-zaysan-teal mb-4"></i>
+                        <h4 class="font-title text-2xl font-bold text-white mb-2">Спасите озеро Зайсан от мусора!</h4>
+                        <p class="text-gray-300 text-sm max-w-md mb-6">Собирайте пластик, бочки и браконьерские сети. У вас 30 секунд. Управление: движение мышью/пальцем или клавиши влево/вправо.</p>
+                        <button onclick="startCleanerGame()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-zaysan-emerald to-zaysan-teal text-white font-bold text-lg shadow-lg hover:scale-105 transition">
+                            Начать Игру
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GAME 2: ECOSYSTEM SIMULATOR -->
+            <div id="game-sim-container" class="glass-card p-6 hidden">
+                <h3 class="font-title text-xl font-bold text-white mb-2">Симулятор Гидро-Экологического Баланса</h3>
+                <p class="text-xs text-gray-400 mb-6">Настройте параметры, чтобы добиться 100% стабильности экосистемы Зайсана.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Control 1 -->
+                    <div class="bg-black/30 p-4 rounded-xl border border-white/10">
+                        <label class="text-sm font-semibold text-white flex justify-between mb-2">
+                            <span>Сброс воды ГЭС</span>
+                            <span id="val-water" class="text-zaysan-teal">50%</span>
+                        </label>
+                        <input type="range" id="sim-water" min="0" max="100" value="50" class="w-full accent-zaysan-teal" oninput="updateSimulator()">
+                        <p class="text-xs text-gray-400 mt-2">Низкий уровень сушит дельту, высокий вымывает нерестилища.</p>
+                    </div>
+
+                    <!-- Control 2 -->
+                    <div class="bg-black/30 p-4 rounded-xl border border-white/10">
+                        <label class="text-sm font-semibold text-white flex justify-between mb-2">
+                            <span>Квота на вылов рыбы</span>
+                            <span id="val-fishing" class="text-zaysan-gold">40%</span>
+                        </label>
+                        <input type="range" id="sim-fishing" min="0" max="100" value="40" class="w-full accent-zaysan-gold" oninput="updateSimulator()">
+                        <p class="text-xs text-gray-400 mt-2">Чрезмерный вылов истощает популяцию сазана и судака.</p>
+                    </div>
+
+                    <!-- Control 3 -->
+                    <div class="bg-black/30 p-4 rounded-xl border border-white/10">
+                        <label class="text-sm font-semibold text-white flex justify-between mb-2">
+                            <span>Посадка прибрежных камышей</span>
+                            <span id="val-reeds" class="text-zaysan-emerald">60%</span>
+                        </label>
+                        <input type="range" id="sim-reeds" min="0" max="100" value="60" class="w-full accent-zaysan-emerald" oninput="updateSimulator()">
+                        <p class="text-xs text-gray-400 mt-2">Камыш фильтрует воду и служит домом для птиц.</p>
+                    </div>
+                </div>
+
+                <!-- Simulation Result Dashboard -->
+                <div class="p-6 rounded-xl bg-gradient-to-r from-zaysan-deep to-slate-900 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-6">
+                        <div class="relative w-24 h-24 flex items-center justify-center">
+                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                <path class="text-gray-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                <path id="sim-progress" class="text-zaysan-emerald" stroke-width="3" stroke-dasharray="75, 100" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            </svg>
+                            <span id="sim-score-text" class="absolute font-bold text-xl text-white">75%</span>
+                        </div>
+                        <div>
+                            <h4 id="sim-status-title" class="text-lg font-bold text-zaysan-emerald">Экосистема Стабильна</h4>
+                            <p id="sim-status-desc" class="text-sm text-gray-300 max-w-md">Баланс между выловом рыбы и уровнем воды поддерживается в безопасных границах.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: QUIZ & CERTIFICATE -->
+        <section id="quiz" class="tab-content max-w-4xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-bold text-white mb-3">Викторина Знатоков Зайсана</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-zaysan-emerald to-zaysan-gold mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4">Проверьте свои знания о легендах, географии и фауне озера и получите памятную грамоту!</p>
+            </div>
+
+            <!-- Quiz Card -->
+            <div id="quiz-card" class="glass-card p-8 border-zaysan-emerald/40 relative">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                    <span class="text-xs font-bold text-zaysan-teal uppercase tracking-wider" id="quiz-step">Вопрос 1 из 5</span>
+                    <span class="text-xs font-bold text-zaysan-gold" id="quiz-score-tracker">Счёт: 0</span>
+                </div>
+
+                <h3 class="font-title text-xl font-bold text-white mb-6" id="quiz-question">
+                    Загрузка вопроса...
+                </h3>
+
+                <div class="space-y-3 mb-6" id="quiz-options">
+                    <!-- Option Buttons Injected by JS -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden p-4 rounded-lg mb-6 text-sm font-medium"></div>
+
+                <button id="quiz-next-btn" onclick="nextQuestion()" class="hidden px-6 py-3 rounded-xl bg-zaysan-emerald text-white font-bold hover:bg-opacity-80 transition w-full">
+                    Следующий вопрос <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Certificate Screen (Hidden by default) -->
+            <div id="quiz-result" class="hidden glass-card p-8 text-center border-2 border-zaysan-gold">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-zaysan-gold/20 flex items-center justify-center text-zaysan-gold text-4xl">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h3 class="font-title text-3xl font-extrabold text-white mb-2">ПОЧЁТНАЯ ГРАМОТА</h3>
+                <p class="text-zaysan-gold text-sm font-semibold uppercase tracking-widest mb-6">Знаток Краеведения Озера Зайсан</p>
+                <p class="text-gray-300 text-base mb-6">
+                    Настоящим подтверждается, что вы успешно прошли интерактивное тестирование по материалам проекта <strong class="text-white">Дулатулы Ильяса (9 «Г» класс)</strong> с результатом <span id="final-score" class="text-zaysan-emerald font-bold">0/5</span>!
+                </p>
+                <button onclick="resetQuiz()" class="px-8 py-3 rounded-xl bg-zaysan-emerald text-white font-bold hover:bg-opacity-80 transition">
+                    <i class="fas fa-redo mr-2"></i> Пройти снова
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="glass-nav mt-16 border-t border-white/10 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-400">
+                Интерактивный краеведческий веб-проект «Озеро Зайсан» • Автор: <strong class="text-white">Дулатулы Ильяс</strong> (9 «Г» класс)
+            </p>
+            <p class="text-xs text-gray-500 mt-2">
+                Создано с использованием HTML5 Canvas, Tailwind CSS и Web Audio API. 
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        /* GLOBAL APP STATE & NAVIGATION */
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-white', 'bg-white/10');
+                if (el.getAttribute('data-tab') === tabId) {
+                    el.classList.add('text-white', 'bg-white/10');
+                }
+            });
+
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            if (tabId === 'geo') {
+                setTimeout(drawMap, 100);
+            } else if (tabId === 'ecology') {
+                setTimeout(initCharts, 100);
+            } else if (tabId === 'games') {
+                setTimeout(initCleanerGame, 100);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* WEB AUDIO SYNTHESIZER FOR AMBIENCE & SOUND EFFECTS */
+        let audioCtx = null;
+        let isAmbiencePlaying = false;
+        let waveNoiseNode = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleAmbience() {
+            initAudio();
+            const icon = document.getElementById('audio-icon');
+
+            if (isAmbiencePlaying) {
+                if (waveNoiseNode) waveNoiseNode.disconnect();
+                isAmbiencePlaying = false;
+                icon.className = 'fas fa-volume-mute text-lg';
+            } else {
+                // Synthesize Gentle Water Wave Noise
+                const bufferSize = audioCtx.sampleRate * 2;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+                whiteNoise.loop = true;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 350;
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.value = 0.08;
+
+                whiteNoise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                whiteNoise.start();
+                waveNoiseNode = whiteNoise;
+                isAmbiencePlaying = true;
+                icon.className = 'fas fa-volume-up text-lg text-zaysan-gold';
+            }
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'pop') {
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } else if (type === 'bird') {
+                // Synthesize Bird Call Chirp
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            }
+        }
+
+        /* HERO CANVAS ANIMATION (Sunset, Waves, Stars, Birds) */
+        const heroCanvas = document.getElementById('hero-canvas');
+        const hCtx = heroCanvas.getContext('2d');
+        let hWidth, hHeight;
+
+        function resizeHeroCanvas() {
+            hWidth = heroCanvas.width = heroCanvas.parentElement.clientWidth;
+            hHeight = heroCanvas.height = heroCanvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeHeroCanvas);
+        resizeHeroCanvas();
+
+        const birds = Array.from({ length: 6 }, () => ({
+            x: Math.random() * hWidth,
+            y: Math.random() * (hHeight * 0.4),
+            speed: 0.8 + Math.random() * 1.2,
+            size: 8 + Math.random() * 6,
+            wingAngle: 0
+        }));
+
+        function animateHero() {
+            hCtx.clearRect(0, 0, hWidth, hHeight);
+
+            // Sunset Gradient Background
+            const grad = hCtx.createLinearGradient(0, 0, 0, hHeight);
+            grad.addColorStop(0, '#06111e');
+            grad.addColorStop(0.4, '#134074');
+            grad.addColorStop(0.7, '#EE6C4D');
+            grad.addColorStop(1, '#0B2545');
+            hCtx.fillStyle = grad;
+            hCtx.fillRect(0, 0, hWidth, hHeight);
+
+            // Sun Disc
+            hCtx.beginPath();
+            hCtx.arc(hWidth * 0.7, hHeight * 0.55, 45, 0, Math.PI * 2);
+            hCtx.fillStyle = 'rgba(233, 196, 106, 0.8)';
+            hCtx.shadowColor = '#E9C46A';
+            hCtx.shadowBlur = 30;
+            hCtx.fill();
+            hCtx.shadowBlur = 0;
+
+            // Animated Water Waves
+            const time = Date.now() * 0.002;
+            for (let i = 0; i < 3; i++) {
+                hCtx.beginPath();
+                hCtx.moveTo(0, hHeight * 0.65 + i * 25);
+                for (let x = 0; x <= hWidth; x += 20) {
+                    const y = Math.sin(x * 0.01 + time + i) * 8 + (hHeight * 0.65 + i * 25);
+                    hCtx.lineTo(x, y);
+                }
+                hCtx.lineTo(hWidth, hHeight);
+                hCtx.lineTo(0, hHeight);
+                hCtx.fillStyle = `rgba(11, 37, 69, ${0.6 + i * 0.15})`;
+                hCtx.fill();
+            }
+
+            // Flying Pelicans/Birds
+            birds.forEach(b => {
+                b.x += b.speed;
+                if (b.x > hWidth + 20) b.x = -20;
+                b.wingAngle += 0.1;
+                const wingY = Math.sin(b.wingAngle) * (b.size * 0.5);
+
+                hCtx.beginPath();
+                hCtx.moveTo(b.x, b.y);
+                hCtx.quadraticCurveTo(b.x - b.size, b.y - wingY, b.x - b.size * 2, b.y);
+                hCtx.moveTo(b.x, b.y);
+                hCtx.quadraticCurveTo(b.x + b.size, b.y - wingY, b.x + b.size * 2, b.y);
+                hCtx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+                hCtx.lineWidth = 2;
+                hCtx.stroke();
+            });
+
+            requestAnimationFrame(animateHero);
+        }
+        animateHero();
+
+        /* INTERACTIVE MAP CANVAS & LOCATIONS */
+        const mapCanvas = document.getElementById('map-canvas');
+        const mCtx = mapCanvas.getContext('2d');
+
+        const mapPoints = [
+            { id: 1, name: 'Дельта Чёрного Иртыша', x: 0.82, y: 0.6, tag: 'Приток & Нерестилище', desc: 'Ключевая артерия, питающая озеро пресной водой с Алтайских гор. Важнейшее место нереста ценных пород рыб.', fact: 'Река Чёрный Иртыш приносит до 80% всего водного притока Зайсана.' },
+            { id: 2, name: 'Мыс Шекельмес', x: 0.5, y: 0.35, tag: 'Геологический Памятник', desc: 'Удивительный береговой рельеф с красно-белыми глиняными каньонами. Здесь находятся палеонтологические находки динозавров и древних млекопитающих.', fact: 'Возраст отложений мыса Шекельмес превышает 50 миллионов лет!' },
+            { id: 3, name: 'Бухтарминское водохранилище', x: 0.2, y: 0.45, tag: 'Гидроузел', desc: 'Зона слияния озера с искусственным морем, созданным плотиной ГЭС в 1960 году.', fact: 'После подпора ГЭС площадь Зайсана увеличилась до 5500 км² в составе водохранилища.' },
+            { id: 4, name: 'Полуостров Аксуат', x: 0.6, y: 0.75, tag: 'Заповедная Зона', desc: 'Мелководные заливы и камышовые заросли — идеальное место для гнездования кудрявого пеликана и бакланов.', fact: 'Здесь обитает одна из крупнейших колоний кудрявых пеликанов в Центральной Азии.' }
+        ];
+
+        let selectedPoint = mapPoints[0];
+
+        function drawMap() {
+            const rect = mapCanvas.parentElement.getBoundingClientRect();
+            mapCanvas.width = rect.width;
+            mapCanvas.height = rect.height;
+
+            const w = mapCanvas.width;
+            const h = mapCanvas.height;
+
+            mCtx.clearRect(0, 0, w, h);
+
+            // Draw Lake Contour (Stylized Shape)
+            mCtx.beginPath();
+            mCtx.moveTo(w * 0.15, h * 0.45);
+            mCtx.bezierCurveTo(w * 0.25, h * 0.2, w * 0.65, h * 0.25, w * 0.85, h * 0.55);
+            mCtx.bezierCurveTo(w * 0.9, h * 0.75, w * 0.55, h * 0.85, w * 0.3, h * 0.7);
+            mCtx.closePath();
+
+            const mapGrad = mCtx.createLinearGradient(0, 0, w, h);
+            mapGrad.addColorStop(0, '#134074');
+            mapGrad.addColorStop(1, '#2A9D8F');
+            mCtx.fillStyle = mapGrad;
+            mCtx.shadowColor = 'rgba(42, 157, 143, 0.4)';
+            mCtx.shadowBlur = 20;
+            mCtx.fill();
+            mCtx.shadowBlur = 0;
+
+            mCtx.strokeStyle = '#8DA9C4';
+            mCtx.lineWidth = 3;
+            mCtx.stroke();
+
+            // Draw Points
+            mapPoints.forEach(p => {
+                const px = p.x * w;
+                const py = p.y * h;
+
+                // Pulsing Ring
+                mCtx.beginPath();
+                mCtx.arc(px, py, 14, 0, Math.PI * 2);
+                mCtx.fillStyle = p.id === selectedPoint.id ? 'rgba(233, 196, 106, 0.4)' : 'rgba(255, 255, 255, 0.2)';
+                mCtx.fill();
+
+                // Point Marker
+                mCtx.beginPath();
+                mCtx.arc(px, py, 7, 0, Math.PI * 2);
+                mCtx.fillStyle = p.id === selectedPoint.id ? '#E9C46A' : '#ffffff';
+                mCtx.fill();
+                mCtx.strokeStyle = '#0B2545';
+                mCtx.lineWidth = 2;
+                mCtx.stroke();
+
+                // Label
+                mCtx.font = '12px Montserrat';
+                mCtx.fillStyle = '#ffffff';
+                mCtx.fillText(p.name, px + 12, py + 4);
+            });
+        }
+
+        mapCanvas.addEventListener('click', (e) => {
+            const rect = mapCanvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            const w = mapCanvas.width;
+            const h = mapCanvas.height;
+
+            mapPoints.forEach(p => {
+                const px = p.x * w;
+                const py = p.y * h;
+                const dist = Math.hypot(clickX - px, clickY - py);
+                if (dist < 20) {
+                    selectedPoint = p;
+                    updateMapCard(p);
+                    drawMap();
+                    playSound('pop');
+                }
+            });
+        });
+
+        function updateMapCard(p) {
+            document.getElementById('map-info-tag').innerText = p.tag;
+            document.getElementById('map-info-title').innerText = p.name;
+            document.getElementById('map-info-desc').innerText = p.desc;
+            document.getElementById('map-info-fact').innerHTML = `<i class="fas fa-lightbulb text-zaysan-gold mr-2"></i><span class="text-xs text-gray-300">${p.fact}</span>`;
+        }
+
+        /* FLORA & FAUNA SPECIES DATA */
+        const bioSpecies = [
+            { name: 'Кудрявый Пеликан', cat: 'bird', status: 'Красная книга', desc: 'Редкая гигантская птица с размахом крыльев до 3 метров. Гнездится в заросших камышом заливах Зайсана.', icon: 'fa-crow' },
+            { name: 'Зайсанский Сазан', cat: 'fish', status: 'Промысловый вид', desc: 'Главный символ рыбных богатств озера. Достигает массы более 15–20 кг.', icon: 'fa-fish' },
+            { name: 'Зайсанская Круглая Головка', cat: 'mammal', status: 'Эндемик / Рептилия', desc: 'Уникальная небольшая ящерица, обитающая в песчаных дюнах берегов Шекельмес.', icon: 'fa-staff-snake' },
+            { name: 'Камышовый Кот (Хаус)', cat: 'mammal', status: 'Редкий', desc: 'Хищное млекопитающее, скрытно обитающее в непроходимых прибрежных тростниковых крепих.', icon: 'fa-cat' },
+            { name: 'Озерный Тростник / Камыш', cat: 'flora', status: 'Доминант', desc: 'Образует непрерывные зеленые пояса вдоль берегов. Естественный биофильтр и дом для тысяч птиц.', icon: 'fa-leaf' },
+            { name: 'Таймень', cat: 'fish', status: 'Ценный вид', desc: 'Крупнейший представитель семейства лососевых, встречающийся в устьях притоков Зайсана.', icon: 'fa-fish' }
+        ];
+
+        function renderBio(filter = 'all') {
+            const grid = document.getElementById('bio-grid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? bioSpecies : bioSpecies.filter(s => s.cat === filter);
+
+            filtered.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-6 border-l-4 border-zaysan-teal hover:border-zaysan-gold transition duration-300';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 rounded-full bg-zaysan-teal/20 flex items-center justify-center text-zaysan-teal">
+                            <i class="fas ${s.icon} text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white/10 text-zaysan-gold">${s.status}</span>
+                    </div>
+                    <h4 class="font-title text-lg font-bold text-white mb-2">${s.name}</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed mb-4">${s.desc}</p>
+                    <button onclick="playSound('bird')" class="text-xs text-zaysan-teal hover:text-white font-semibold flex items-center gap-1">
+                        <i class="fas fa-volume-up"></i> Послушать звук природы
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterBio(cat) {
+            document.querySelectorAll('.bio-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-zaysan-emerald', 'text-white');
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.classList.add('bg-zaysan-emerald', 'text-white');
+                }
+            });
+            renderBio(cat);
+        }
+        renderBio();
+
+        /* ECOLOGY CHARTS */
+        let chartsInitialized = false;
+
+        function initCharts() {
+            if (chartsInitialized) return;
+            chartsInitialized = true;
+
+            // Water Level Line Chart
+            const ctx1 = document.getElementById('chart-water-level').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['1950', '1960', '1970', '1990', '2010', '2025'],
+                    datasets: [{
+                        label: 'Уровень воды (метры над у.м.)',
+                        data: [386, 392, 392.5, 391.8, 391.2, 391.5],
+                        borderColor: '#2A9D8F',
+                        backgroundColor: 'rgba(42, 157, 143, 0.2)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#ffffff' } } },
+                    scales: {
+                        x: { ticks: { color: '#8DA9C4' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#8DA9C4' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    }
+                }
+            });
+
+            // Threats Pie Chart
+            const ctx2 = document.getElementById('chart-threats').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Браконьерство и сети', 'Изменение стока Иртыша', 'Заиление берегов', 'Климатические засухи'],
+                    datasets: [{
+                        data: [40, 30, 15, 15],
+                        backgroundColor: ['#EE6C4D', '#E9C46A', '#8DA9C4', '#134074']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#ffffff' } } }
+                }
+            });
+        }
+
+        /* GAME 1: LAKE CLEANER CANVAS GAME */
+        function switchGame(gameType) {
+            document.getElementById('game-cleaner-container').classList.toggle('hidden', gameType !== 'cleaner');
+            document.getElementById('game-sim-container').classList.toggle('hidden', gameType !== 'sim');
+
+            document.getElementById('btn-game-cleaner').classList.toggle('text-zaysan-emerald', gameType === 'cleaner');
+            document.getElementById('btn-game-cleaner').classList.toggle('border-zaysan-emerald', gameType === 'cleaner');
+            document.getElementById('btn-game-sim').classList.toggle('text-zaysan-emerald', gameType === 'sim');
+            document.getElementById('btn-game-sim').classList.toggle('border-zaysan-emerald', gameType === 'sim');
+        }
+
+        const gameCanvas = document.getElementById('game-canvas');
+        const gCtx = gameCanvas.getContext('2d');
+        let gameRunning = false;
+        let gameScore = 0;
+        let gameTimeLeft = 30;
+        let gameTimerInterval = null;
+
+        const boat = { x: 200, y: 0, width: 60, height: 25 };
+        let gameItems = [];
+
+        function initCleanerGame() {
+            gameCanvas.width = gameCanvas.parentElement.clientWidth;
+            gameCanvas.height = gameCanvas.parentElement.clientHeight || 400;
+            boat.y = gameCanvas.height - 40;
+            boat.x = gameCanvas.width / 2 - 30;
+        }
+
+        function startCleanerGame() {
+            initCleanerGame();
+            document.getElementById('game-overlay').classList.add('hidden');
+            gameScore = 0;
+            gameTimeLeft = 30;
+            gameRunning = true;
+            gameItems = [];
+
+            document.getElementById('game-score').innerText = gameScore;
+            document.getElementById('game-timer').innerText = gameTimeLeft + 's';
+
+            clearInterval(gameTimerInterval);
+            gameTimerInterval = setInterval(() => {
+                gameTimeLeft--;
+                document.getElementById('game-timer').innerText = gameTimeLeft + 's';
+                if (gameTimeLeft <= 0) {
+                    endCleanerGame();
+                }
+            }, 1000);
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Mouse/Touch controls for Boat
+        gameCanvas.addEventListener('mousemove', (e) => {
+            if (!gameRunning) return;
+            const rect = gameCanvas.getBoundingClientRect();
+            boat.x = e.clientX - rect.left - boat.width / 2;
+        });
+
+        gameCanvas.addEventListener('touchmove', (e) => {
+            if (!gameRunning) return;
+            const rect = gameCanvas.getBoundingClientRect();
+            boat.x = e.touches[0].clientX - rect.left - boat.width / 2;
+        });
+
+        function endCleanerGame() {
+            gameRunning = false;
+            clearInterval(gameTimerInterval);
+            const overlay = document.getElementById('game-overlay');
+            overlay.classList.remove('hidden');
+            overlay.innerHTML = `
+                <i class="fas fa-trophy text-5xl text-zaysan-gold mb-4"></i>
+                <h4 class="font-title text-2xl font-bold text-white mb-2">Игра Завершена!</h4>
+                <p class="text-gray-300 text-base mb-6">Вы очистили озеро и набрали <strong class="text-zaysan-gold font-bold text-xl">${gameScore}</strong> очков!</p>
+                <button onclick="startCleanerGame()" class="px-8 py-3 rounded-xl bg-zaysan-emerald text-white font-bold hover:scale-105 transition">
+                    Сиграть Снова
+                </button>
+            `;
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            gCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            // Water BG
+            gCtx.fillStyle = '#0B2545';
+            gCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            // Spawn Trash or Pelican/Fish
+            if (Math.random() < 0.04) {
+                const isTrash = Math.random() > 0.3;
+                gameItems.push({
+                    x: Math.random() * (gameCanvas.width - 30),
+                    y: -20,
+                    size: 24,
+                    speed: 2 + Math.random() * 2.5,
+                    isTrash: isTrash,
+                    type: isTrash ? (Math.random() > 0.5 ? 'bottle' : 'net') : 'fish'
+                });
+            }
+
+            // Draw Boat
+            gCtx.fillStyle = '#2A9D8F';
+            gCtx.beginPath();
+            gCtx.roundRect(boat.x, boat.y, boat.width, boat.height, 8);
+            gCtx.fill();
+            gCtx.fillStyle = '#ffffff';
+            gCtx.font = '12px Montserrat';
+            gCtx.fillText('Эко-Катер', boat.x + 4, boat.y - 6);
+
+            // Update & Draw Items
+            gameItems.forEach((item, index) => {
+                item.y += item.speed;
+
+                // Collision Detection with Boat
+                if (
+                    item.y + item.size >= boat.y &&
+                    item.x + item.size >= boat.x &&
+                    item.x <= boat.x + boat.width
+                ) {
+                    if (item.isTrash) {
+                        gameScore += 10;
+                        playSound('pop');
+                    } else {
+                        gameScore = Math.max(0, gameScore - 15);
+                        playSound('error');
+                    }
+                    document.getElementById('game-score').innerText = gameScore;
+                    gameItems.splice(index, 1);
+                    return;
+                }
+
+                // Render Item
+                gCtx.beginPath();
+                if (item.isTrash) {
+                    gCtx.fillStyle = item.type === 'bottle' ? '#EE6C4D' : '#E9C46A';
+                    gCtx.arc(item.x, item.y, 10, 0, Math.PI * 2);
+                    gCtx.fill();
+                    gCtx.fillStyle = '#000';
+                    gCtx.font = '10px FontAwesome';
+                    gCtx.fillText(item.type === 'bottle' ? '🗑️' : '🕸️', item.x - 6, item.y + 4);
+                } else {
+                    gCtx.fillStyle = '#8DA9C4';
+                    gCtx.arc(item.x, item.y, 10, 0, Math.PI * 2);
+                    gCtx.fill();
+                    gCtx.fillStyle = '#000';
+                    gCtx.fillText('🐟', item.x - 6, item.y + 4);
+                }
+
+                if (item.y > gameCanvas.height + 30) {
+                    gameItems.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        /* GAME 2: ECOSYSTEM SIMULATOR LOGIC */
+        function updateSimulator() {
+            const w = parseInt(document.getElementById('sim-water').value);
+            const f = parseInt(document.getElementById('sim-fishing').value);
+            const r = parseInt(document.getElementById('sim-reeds').value);
+
+            document.getElementById('val-water').innerText = w + '%';
+            document.getElementById('val-fishing').innerText = f + '%';
+            document.getElementById('val-reeds').innerText = r + '%';
+
+            // Calculate Ecosystem Health Index
+            const waterPenalty = Math.abs(w - 60) * 1.2;
+            const fishingPenalty = Math.abs(f - 30) * 1.5;
+            const reedBonus = r * 0.4;
+
+            let health = Math.round(100 - waterPenalty - fishingPenalty + (reedBonus - 20));
+            health = Math.max(10, Math.min(100, health));
+
+            document.getElementById('sim-score-text').innerText = health + '%';
+            document.getElementById('sim-progress').setAttribute('stroke-dasharray', `${health}, 100`);
+
+            const title = document.getElementById('sim-status-title');
+            const desc = document.getElementById('sim-status-desc');
+
+            if (health >= 80) {
+                title.innerText = 'Экосистема в Идеальном Балансе!';
+                title.className = 'text-lg font-bold text-zaysan-emerald';
+                desc.innerText = 'Популяции рыб восстанавливаются, пеликаны безопасно гнездятся, вода чисто профильтрована.';
+            } else if (health >= 50) {
+                title.innerText = 'Умеренная Стабильность';
+                title.className = 'text-lg font-bold text-zaysan-gold';
+                desc.innerText = 'Экосистема справляется, но есть риски заиления или истощения рыбных запасов.';
+            } else {
+                title.innerText = 'Кризис Экосистемы!';
+                title.className = 'text-lg font-bold text-zaysan-sand';
+                desc.innerText = 'Внимание: Высокая угроза заморных явлений и гибeли редких птиц из-за дисбаланса!';
+            }
+        }
+
+        /* QUIZ SYSTEM */
+        const quizQuestions = [
+            {
+                q: 'Что означает одно из древних названий озера — «Жесон-Нор»?',
+                options: ['Озеро колокольчиков / Звонкое', 'Соленая вода', 'Песчаная гора', 'Глубокая бездна'],
+                correct: 0,
+                info: 'Монгольское «Жесон-Нор» переводится как Озеро колокольчиков благодаря гулу, доносившемуся от волн и камышей.'
+            },
+            {
+                q: 'Какая главная река впадает в озеро Зайсан?',
+                options: ['Урал', 'Чёрный Иртыш', 'Сырдарья', 'Или'],
+                correct: 1,
+                info: 'Чёрный Иртыш несёт свои пресные воды с Алтайских гор напрямую в Зайсан.'
+            },
+            {
+                q: 'Какое событие в 1960 году кардинально изменило размеры озера?',
+                options: ['Падение метеорита', 'Запуск Бухтарминской ГЭС', 'Землетрясение', 'Осушение канала'],
+                correct: 1,
+                info: 'После постройки Бухтарминской ГЭС уровень озера поднялся на 6 метров.'
+            },
+            {
+                q: 'Какая редкая гигантская птица гнездится на берегах Зайсана?',
+                options: ['Кудрявый пеликан', 'Розовый фламинго', 'Снежный гриф', 'Пингвин'],
+                correct: 0,
+                info: 'Кудрявый пеликан занесён в Красную книгу и находит приют в заросших заливах озера.'
+            },
+            {
+                q: 'Назовите мыс на Зайсане с уникальными красно-белыми глиняными каньонами:',
+                options: ['Шекельмес', 'Алтай', 'Тарбагатай', 'Зайсанчик'],
+                correct: 0,
+                info: 'Мыс Шекельмес славится палеонтологическими находками и инопланетным пейзажем.'
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        function loadQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-step').innerText = `Вопрос ${currentQuizIndex + 1} из ${quizQuestions.length}`;
+            document.getElementById('quiz-question').innerText = q.q;
+
+            const opts = document.getElementById('quiz-options');
+            opts.innerHTML = '';
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl glass-card hover:bg-white/10 transition text-sm font-medium border border-white/10 flex justify-between items-center';
+                btn.innerHTML = `<span>${opt}</span> <i class="far fa-circle text-gray-400"></i>`;
+                btn.onclick = () => selectQuizOption(idx);
+                opts.appendChild(btn);
+            });
+        }
+
+        function selectQuizOption(idx) {
+            const q = quizQuestions[currentQuizIndex];
+            const buttons = document.querySelectorAll('#quiz-options button');
+
+            buttons.forEach(b => b.disabled = true);
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+
+            if (idx === q.correct) {
+                quizScore++;
+                buttons[idx].classList.add('bg-zaysan-emerald/40', 'border-zaysan-emerald');
+                buttons[idx].querySelector('i').className = 'fas fa-check-circle text-zaysan-emerald';
+                feedback.className = 'p-4 rounded-lg mb-6 text-sm font-medium bg-zaysan-emerald/20 text-zaysan-emerald border border-zaysan-emerald/40';
+                feedback.innerText = 'Правильно! ' + q.info;
+                playSound('pop');
+            } else {
+                buttons[idx].classList.add('bg-zaysan-sand/40', 'border-zaysan-sand');
+                buttons[idx].querySelector('i').className = 'fas fa-times-circle text-zaysan-sand';
+                buttons[q.correct].classList.add('bg-zaysan-emerald/40', 'border-zaysan-emerald');
+                feedback.className = 'p-4 rounded-lg mb-6 text-sm font-medium bg-zaysan-sand/20 text-zaysan-sand border border-zaysan-sand/40';
+                feedback.innerText = 'Неверно. ' + q.info;
+                playSound('error');
+            }
+
+            document.getElementById('quiz-score-tracker').innerText = `Счёт: ${quizScore}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-card').classList.add('hidden');
+            const resultCard = document.getElementById('quiz-result');
+            resultCard.classList.remove('hidden');
+            document.getElementById('final-score').innerText = `${quizScore} из ${quizQuestions.length}`;
+        }
+
+        function resetQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score-tracker').innerText = 'Счёт: 0';
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-card').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // Initialize quiz on load
+        loadQuestion();
+    </script>
+</body>
+</html>
